@@ -31,7 +31,8 @@ public class Executor {
 	public static void main(String[] args) throws InterruptedException{
 		
 		Executor exe2 = (Executor)SpringContext.myGetBean("executor");
-
+		exe2.addUrl();
+		/*
 		exe2.addLog();
 		System.out.println("---------------------------------------");
 		TestThread tt = new TestThread();
@@ -39,12 +40,16 @@ public class Executor {
 		Thread.sleep(600);
 		Executor exe1 = new Executor();
 		exe1.addLog1();
+		*/
 	}
 	private void addLog1(){
 		CustomizatedLog4j.info(logger, "log beyond instance");
 	}
 	private void addLog(){
 		logger.info("newer log");
+	}
+	public void addUrl(){
+		serviceIN.addUrlSet();
 	}
 	/**
 	 * initialize context for the project.

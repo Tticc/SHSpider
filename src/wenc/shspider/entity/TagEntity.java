@@ -6,13 +6,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
 @Component
 @Entity  
-@Table(name="tag")
+@Table(name="tag",
+indexes = {@Index(name = "tagIndex",  columnList="tag", unique = true)})
 public class TagEntity {
 	
 	@Id

@@ -7,29 +7,42 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Index;
 
+//import org.hibernate.annotations.Index;
 import org.springframework.stereotype.Component;
 
 @Component
-@Entity  
-@Table(name="urlset")  
+@Entity
+//@Table(name = "urlset")
+@Table(name = "urlset",
+indexes = {@Index(name = "urlIndex",  columnList="url", unique = true)})
 public class UrlSetEntity {
 	@Id
-    @GeneratedValue
-    @Column(name="id")
-    private int id;
-	
-	@Column(name="url",nullable=false)  
-    private String url;
-	
-	@Column(name="tag_ids",nullable=true)  
-    private String tagIDs;
-	
-	@Column(name="createtime",nullable=false)  
-    private Date createTime = new Date();
-	
-	@Column(name="modifytime",nullable=false)  
-    private Date modifyTime = new Date();
+	@GeneratedValue
+	@Column(name = "id")
+	private int id;
+
+	@Column(name = "url", nullable = false, unique = true)
+	private String url;
+
+	@Column(name = "pagetitle", nullable = true)
+	private String pageTitle;
+
+	@Column(name = "charset", nullable = false)
+	private String charset = "default";
+
+	@Column(name = "isprocess", nullable = false)
+	private boolean isprocess = false;
+
+	@Column(name = "tag_ids", nullable = true)
+	private String tagIDs;
+
+	@Column(name = "createtime", nullable = false)
+	private Date createTime = new Date();
+
+	@Column(name = "modifytime", nullable = false)
+	private Date modifyTime = new Date();
 
 	public int getId() {
 		return id;
@@ -45,6 +58,30 @@ public class UrlSetEntity {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getPageTitle() {
+		return pageTitle;
+	}
+
+	public void setPageTitle(String pageTitle) {
+		this.pageTitle = pageTitle;
+	}
+
+	public String getCharset() {
+		return charset;
+	}
+
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	public boolean isIsprocess() {
+		return isprocess;
+	}
+
+	public void setIsprocess(boolean isprocess) {
+		this.isprocess = isprocess;
 	}
 
 	public String getTagIDs() {
@@ -70,5 +107,5 @@ public class UrlSetEntity {
 	public void setModifyTime(Date modifyTime) {
 		this.modifyTime = modifyTime;
 	}
-	
+
 }

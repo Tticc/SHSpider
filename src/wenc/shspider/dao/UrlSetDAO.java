@@ -2,6 +2,7 @@ package wenc.shspider.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import wenc.shspider.entity.UrlSetEntity;
 //need @Repository to generate the bean
 @Repository
 public class UrlSetDAO {
+	static Logger logger = Logger.getLogger(UrlSetDAO.class);
+	
 	@Autowired
-	private SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;	
+
 	
 	//@Transactional
 	public UrlSetEntity getUrlSetEntityById(int id){
@@ -28,9 +32,17 @@ public class UrlSetDAO {
 		}
 		return null;
 	}
-	
+	/*
+	 
+	 */
 	public void addUrl(UrlSetEntity url){
-		sessionFactory.getCurrentSession().save(url);
+		try{
+			sessionFactory.getCurrentSession().save(url);
+		}catch(org.hibernate.exception.ConstraintViolationException ex){
+			sessionFactory.getCurrentSession().clear();
+			logger.info("Duplicate entry at wenc.shspider.dao.UrlSetDAO.addUrl()");
+			//sessionFactory.getCurrentSession().flush();
+		}
 	}
 	
 	public void updateUrl(UrlSetEntity url){

@@ -11,7 +11,6 @@
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/hibernate-commons-annotations-3.2.0.Final.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/hibernate-core-3.6.9.Final.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/hibernate-entitymanager-3.6.9.Final.jar"/>
-	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/mysql-connector-java-5.0.8.jar"/>
@@ -35,5 +34,6 @@
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/aspectjrt-1.6.10.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/aspectjweaver-1.6.12.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

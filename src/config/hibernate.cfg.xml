@@ -7,9 +7,9 @@
 <hibernate-configuration>
     <session-factory>
 
+		<!-- <property name="hibernate.connection.isolation">8</property> -->
         <!-- <mapping class="wenc.shspider.entity.UserEntity" /> -->
         <mapping class="wenc.shspider.entity.UrlSetEntity" />
         <mapping class="wenc.shspider.entity.TagEntity" />
-
     </session-factory>
 </hibernate-configuration>

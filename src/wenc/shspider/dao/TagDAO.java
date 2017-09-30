@@ -2,6 +2,7 @@ package wenc.shspider.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import wenc.shspider.entity.TagEntity;
 //need @Repository to generate the bean
 @Repository
 public class TagDAO {
+	static Logger logger = Logger.getLogger(TagDAO.class);
+	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
 	
 	public TagEntity getTagEntityById(int id){
 		String queryStr = "from TagEntity where id =  ?";
@@ -40,9 +44,12 @@ public class TagDAO {
 	}
 	
 	public void addTag(TagEntity tag){
-		System.out.println("before save tag");
-		sessionFactory.getCurrentSession().save(tag);
-		System.out.println("after save tag");
+		try{
+			sessionFactory.getCurrentSession().save(tag);
+		}catch(org.hibernate.exception.ConstraintViolationException ex){
+			sessionFactory.getCurrentSession().clear();
+			logger.info("Duplicate entry at wenc.shspider.dao.TagDAO.addTag()");
+		}
 	}
 	
 	public void updateTag(TagEntity tag){

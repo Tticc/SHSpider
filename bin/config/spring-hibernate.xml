@@ -72,6 +72,7 @@
 		<property name="configurationClass">
 			<value>org.hibernate.cfg.AnnotationConfiguration</value>
 		</property> 
+		
            <!-- <property name="annotatedClasses">  
             <list>  
                 <value>com.des.entity.User</value>  
