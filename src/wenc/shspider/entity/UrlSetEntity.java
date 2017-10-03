@@ -30,7 +30,7 @@ public class UrlSetEntity {
 	private String pageTitle;
 
 	@Column(name = "charset", nullable = false)
-	private String charset = "default";
+	private String charset = " ";
 
 	@Column(name = "isprocess", nullable = false)
 	private boolean isprocess = false;

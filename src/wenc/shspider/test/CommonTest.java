@@ -2,6 +2,8 @@ package wenc.shspider.test;
 
 import org.junit.*;
 
+import wenc.shspider.util.MyEnum;
+
 public class CommonTest {
 	@BeforeClass//在所有方法开始之前 static
 	public static void beforeClass(){}	
@@ -33,8 +35,8 @@ public class CommonTest {
 	}
 	@Test
 	public void testGetTitle(){
-		String html = "fjisoejit<title>i am the title</title>fhsuaiofji";
-		System.out.println(getTitle(html));
+		String html = "fjis<masteji charset=\"utf-8\">oejit<title>i am the title</title>fhsuaiofji";
+		System.out.println(getCharset(html));
 	}
 	public static String getTitle(String content){
 		int start = content.indexOf("<title");
@@ -48,6 +50,19 @@ public class CommonTest {
 		start = content.indexOf("<");
 		content = content.substring(0,start);
 		return content;
+	}
+
+	public static String getCharset(String contents){
+		int start = contents.indexOf("charset");
+		if(start == -1){
+			return MyEnum.DEFAULTCHARSET.toString();
+		}
+		contents = contents.substring(start,start+20);
+		start = contents.indexOf("=");
+		contents = contents.substring(start+1);
+		int end = contents.indexOf(">");
+		contents = contents.substring(0,end);
+		return contents;
 	}
 }
 

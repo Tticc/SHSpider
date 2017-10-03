@@ -20,6 +20,7 @@ public class SpiderTools {
 
 	private static HashSet<String> persistentUrlSet = new HashSet<String>();
 	public static final String CHARSET = "utf-8";
+	//public static final String GET_CHAR = "charset";
 
 	public synchronized static String getFromVisitedUrlSet(){
 		if(persistentUrlSet.size() == 0){
@@ -217,6 +218,18 @@ public class SpiderTools {
         }
         return finalUrl;
     }
+	public static String getCharset(String contents){
+		int start = contents.indexOf("charset");
+		if(start == -1){
+			return MyEnum.DEFAULTCHARSET.toString();
+		}
+		contents = contents.substring(start,start+20);
+		start = contents.indexOf("=");
+		contents = contents.substring(start+1);
+		int end = contents.indexOf(">");
+		contents = contents.substring(0,end);
+		return contents;
+	}
 	
 }
 

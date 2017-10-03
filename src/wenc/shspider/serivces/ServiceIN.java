@@ -39,9 +39,9 @@ public class ServiceIN {
 		url.setUrl("https://www.hao123.com/");
 		url.setTagIDs("root");
 		urlService.addUrl(url);
-		UrlSetEntity url1 = new UrlSetEntity();
+		/*UrlSetEntity url1 = new UrlSetEntity();
 		url1.setUrl("first url2");
-		urlService.addUrl(url1);
+		urlService.addUrl(url1);*/
 	}
 	public void addUrlSet(UrlSetEntity url){
 		urlService.addUrl(url);

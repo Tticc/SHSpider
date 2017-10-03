@@ -35,6 +35,7 @@ public class DataFecthThread extends Thread{
 	}
 	private void getAllLinks(String contents, String url){
 		newUrlSet.addAll(SpiderTools.getLinksFromContent(contents,url));
+		
 		persistNewUrl();
 	}
 	private void persistNewUrl(){
@@ -52,6 +53,7 @@ public class DataFecthThread extends Thread{
 	private void updateTags(String contents, String url){
 		UrlSetEntity persistentUrl = serviceIN.getUrlSetEntityByUrl(url);
 		persistentUrl.setPageTitle(SpiderTools.getTitle(contents));
+		persistentUrl.setCharset(SpiderTools.getCharset(contents));
 		serviceIN.updateUrlSet(persistentUrl);
 	}
 }

@@ -34,13 +34,13 @@ public class Executor {
 	public static void main(String[] args) throws InterruptedException{
 		
 		Executor exe2 = (Executor)SpringContext.myGetBean("executor");
-		exe2.addUrl();
+		//exe2.addUrl();
 		//boot spider with thread number
-		//exe2.bootWithThreadNum(1);
+		exe2.bootWithThreadNum(1);
 		
 		
 		/* test area *****************************************************************/
-		exe2.fetchFromDB();
+		//exe2.fetchFromDB();
 		
 		/*
 		exe2.addLog();

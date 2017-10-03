@@ -67,6 +67,10 @@ public class UrlSetDAO {
 			sessionFactory.getCurrentSession().clear();
 			logger.info("Duplicate entry at wenc.shspider.dao.UrlSetDAO.addUrl()");
 			//sessionFactory.getCurrentSession().flush();
+		}catch(org.hibernate.exception.DataException ex2){
+			sessionFactory.getCurrentSession().clear();
+			System.out.println("Data truncation: Data too long for column 'url' at row 1");
+			logger.info("Data truncation: Data too long for column 'url' at row 1");
 		}
 	}
 	
