@@ -32,9 +32,34 @@ public class UrlSetDAO {
 		}
 		return null;
 	}
-	/*
-	 
-	 */
+	public UrlSetEntity getUrlSetEntityByUrl(String url){
+		String queryStr = "from UrlSetEntity where url =  ?";
+		Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+		query.setString(0, url);
+		List<UrlSetEntity> ur = query.list();
+		if(ur.size()!=0){
+			return ur.get(0);
+		}
+		return null;
+	}
+	//use SQL
+	/*public List<String> fetchPersistedUrl(int number) {
+		String queryStr = "select url from urlset where isprocess = 0 limit 0,?";
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(queryStr);
+		query.setInteger(0, number);
+		
+		return query.list();
+	}*/
+	//use HQL
+	public List<UrlSetEntity> fetchPersistedUrl(int number) {
+		String queryStr = "from UrlSetEntity where isprocess = 0";
+		Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+		query.setFirstResult(0);
+		query.setMaxResults(number);
+		List<UrlSetEntity> ur = query.list();
+		return ur;
+	}
+	
 	public void addUrl(UrlSetEntity url){
 		try{
 			sessionFactory.getCurrentSession().save(url);

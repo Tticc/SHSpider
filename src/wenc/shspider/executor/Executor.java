@@ -1,5 +1,7 @@
 package wenc.shspider.executor;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import wenc.shspider.component.*;
 import wenc.shspider.serivces.ServiceIN;
+import wenc.shspider.spider.BootSpider;
 import wenc.shspider.springcontext.SpringContext;
 import wenc.shspider.test.TestCus;
 import wenc.shspider.test.TestThread;
@@ -24,14 +27,21 @@ public class Executor {
 	
 	@Autowired
 	private ServiceIN serviceIN;
-	
+
 	@Autowired
-	private TestCus tc;
+	private BootSpider bootSpider;
 	
 	public static void main(String[] args) throws InterruptedException{
 		
 		Executor exe2 = (Executor)SpringContext.myGetBean("executor");
 		exe2.addUrl();
+		//boot spider with thread number
+		//exe2.bootWithThreadNum(1);
+		
+		
+		/* test area *****************************************************************/
+		exe2.fetchFromDB();
+		
 		/*
 		exe2.addLog();
 		System.out.println("---------------------------------------");
@@ -42,14 +52,34 @@ public class Executor {
 		exe1.addLog1();
 		*/
 	}
+	//for test
+	private void fetchFromDB(){
+		List<String> list = serviceIN.fetchPersistedUrl(10);
+		System.out.println("-----------------------------------------------------------");
+		for(String item : list){
+			System.out.println(item);
+		}
+	}
+	//useful
+	private void addUrl(){
+		serviceIN.addUrlSet();
+	}
+	//useful
+	private void bootWithThreadNum(int threadNum){
+		try {
+			bootSpider.bootWithThreadNum(threadNum);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//useless
 	private void addLog1(){
 		CustomizatedLog4j.info(logger, "log beyond instance");
 	}
 	private void addLog(){
 		logger.info("newer log");
-	}
-	public void addUrl(){
-		serviceIN.addUrlSet();
 	}
 	/**
 	 * initialize context for the project.

@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/aspectjweaver-1.6.12.jar"/>
 	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="D:/Workspaces/MyEclipse 2016/SHSpider/lib/junit-4.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

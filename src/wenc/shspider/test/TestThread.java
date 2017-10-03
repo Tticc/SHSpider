@@ -1,7 +1,5 @@
 package wenc.shspider.test;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import wenc.shspider.springcontext.SpringContext;
 

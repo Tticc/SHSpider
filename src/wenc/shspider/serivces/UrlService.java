@@ -1,5 +1,8 @@
 package wenc.shspider.serivces;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +20,23 @@ public class UrlService {
 			urlSetDAO.addUrl(url);
 		
 	}
-	
+
+	public List<String> fetchPersistedUrl(int number) {
+		List<UrlSetEntity> listEntity = urlSetDAO.fetchPersistedUrl(number);
+		List<String> urlList = new ArrayList<String>();
+		if(listEntity != null){
+			for(UrlSetEntity item : listEntity){
+				item.setIsprocess(true);
+				urlList.add(item.getUrl());
+				updateUrl(item);
+			}
+		}
+		return urlList;
+	}
+	public void updateUrl(UrlSetEntity url){
+		urlSetDAO.updateUrl(url);
+	}
+	public UrlSetEntity getUrlSetEntityByUrl(String url){
+		return urlSetDAO.getUrlSetEntityByUrl(url);
+	}
 }
