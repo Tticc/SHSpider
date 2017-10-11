@@ -15,7 +15,7 @@ public class DataFecthThread extends Thread{
 	private ServiceIN serviceIN = (ServiceIN)SpringContext.myGetBean("serviceIN");
 	
 	@Override
-	public void start(){
+	public void run(){
 		while(!SpiderTools.isEmptyPersistentUrlSet()){
 			try{
 				dataHanding(SpiderTools.getFromVisitedUrlSet());
@@ -25,6 +25,10 @@ public class DataFecthThread extends Thread{
         	}
 		}
 	}
+	/*@Override
+	public void interrupt(){
+		
+	}*/
 	private void dataHanding(String url) throws IOException{
 		String contents = SpiderTools.getContentFromUrl(url);
 		dealWithPage(contents,url);

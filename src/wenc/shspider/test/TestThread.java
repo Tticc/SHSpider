@@ -9,7 +9,7 @@ public class TestThread extends Thread{
 	TestCus tc = (TestCus)SpringContext.myGetBean("testCus");
 	public void testM1(){
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(10*1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,7 +23,7 @@ public class TestThread extends Thread{
 	}
 	
 	@Override
-	public void start(){
+	public void run(){
 		System.out.println("a new thread");
 		testM1();
 		System.out.println("thread end!");

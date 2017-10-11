@@ -29,4 +29,7 @@ public class SpringContext {
 		}
 		return ctx.getBean(beanName);
 	}
+	public static void destroyContext(){
+		ctx = null;
+	}
 }

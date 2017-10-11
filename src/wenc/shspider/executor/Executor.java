@@ -21,7 +21,7 @@ import wenc.shspider.test.TestThread;
 public class Executor {
 	static Logger logger = Logger.getLogger(Executor.class);
 	//static ApplicationContext ctx;
-	
+	static final int numofthread = 3;
 	@Autowired @Qualifier("customizatedLog4j")
 	private CustomizatedLog4j customizatedLog4j;
 	
@@ -36,9 +36,23 @@ public class Executor {
 		Executor exe2 = (Executor)SpringContext.myGetBean("executor");
 		//exe2.addUrl();
 		//boot spider with thread number
-		exe2.bootWithThreadNum(1);
+		exe2.bootWithThreadNum(numofthread);
 		
-		
+		/*while(true){
+			try{
+				Thread.sleep(1000*60*7);
+				System.out.println("start to destory context");
+				SpringContext.destroyContext();
+				exe2 = (Executor)SpringContext.myGetBean("executor");
+				System.out.println("start to boot thread");
+				exe2.bootWithThreadNum(numofthread);
+				logger.info("tttttttttttt new context");
+			}catch(Exception ex){
+				ex.printStackTrace();
+				System.out.println("reopen thread!");
+				logger.info("reopen thread!");
+			}
+		}*/
 		/* test area *****************************************************************/
 		//exe2.fetchFromDB();
 		
