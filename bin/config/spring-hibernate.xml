@@ -49,9 +49,9 @@
               <property name="password"> 
                      <value>${jdbc.password}</value> 
               </property> 
-              <property name="maxActive"> 
-                     <value>255</value> 
-              </property> 
+              <property name="maxActive">
+                     <value>255</value>
+              </property>
               <property name="maxIdle"> 
                      <value>12</value> 
               </property> 
