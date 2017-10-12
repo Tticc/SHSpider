@@ -71,11 +71,20 @@ public class UrlSetDAO {
 			sessionFactory.getCurrentSession().clear();
 			System.out.println("Data truncation: Data too long for column 'url' at row 1");
 			logger.info("Data truncation: Data too long for column 'url' at row 1");
+		}catch(Exception exx){
+			sessionFactory.getCurrentSession().clear();
+			System.out.println("something wrong finally!!!!!!!!!!!!!!!");
+		}finally{
+			url = null;
 		}
 	}
 	
 	public void updateUrl(UrlSetEntity url){
-		sessionFactory.getCurrentSession().update(url);
+		try{
+			sessionFactory.getCurrentSession().update(url);
+		}finally{
+			url = null;
+		}
 	}
 	
 	public void deleteUrl(int urlId){

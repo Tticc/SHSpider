@@ -46,7 +46,9 @@ public class DataFecthThread extends Thread{
 		for(java.util.Iterator<String> it = newUrlSet.iterator();it.hasNext();){
 			String url = it.next();
 			manipulateDB(url);
+			//newUrlSet.re
 		}
+		newUrlSet.removeAll(newUrlSet);
 		newUrlSet = new HashSet<String>();
 	}
 	private void manipulateDB(String url){

@@ -37,7 +37,11 @@ public class Executor {
 		//exe2.addUrl();
 		//boot spider with thread number
 		exe2.bootWithThreadNum(numofthread);
-		
+		int hours = 0;
+		while(true){
+			Thread.sleep(1000*60*60);
+			System.out.println("Spider has run " +(++hours)+ " hours!");
+		}
 		/*while(true){
 			try{
 				Thread.sleep(1000*60*7);
