@@ -111,6 +111,9 @@ public class SpiderTools {
         String[] contents = content.split("<a"); 
         for(int i = 0; i < contents.length; i++){
 			int length = contents[i].indexOf(">");
+			if(length <= 0){
+				continue;
+			}
 			contents[i] = contents[i].substring(0,length);
 		}
         for(String url : contents){

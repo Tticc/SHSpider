@@ -22,6 +22,20 @@ public class CommonTest {
 		//连个参数的含义，（期望值，实际值）
 		
 	}
+	@Test
+	public void testSplit(){
+		String content = "adji<afjisdo>jidos<ajfdiso>fooee<apeioeo>ieej<ajeio";
+		String[] contents = content.split("<a"); 
+		System.out.println(contents.length);
+		for(int i = 0; i < contents.length; i++){
+			int length = contents[i].indexOf(">");
+			if(length <= 0){
+				continue;
+			}
+			contents[i] = contents[i].substring(0,length);
+			System.out.println(contents[i]);
+		}
+	}
 	@Test(expected = ArithmeticException.class)
 	//@Ignore
 	public void testDevide(){
