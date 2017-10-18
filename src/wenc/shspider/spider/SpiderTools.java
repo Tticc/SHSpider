@@ -11,15 +11,19 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.springcontext.SpringContext;
 import wenc.shspider.util.MyEnum;
+import wenc.shspider.util.TooLargeException;
 
 public class SpiderTools {
 
 	private static HashSet<String> persistentUrlSet = new HashSet<String>();
-	public static final String CHARSET = "utf-8";
+	public static final String CHARSET = "UTF-8";
+	public static final long noLargeThen = 1024*1024*5;
 	//public static final String GET_CHAR = "charset";
 
 	public synchronized static String getFromVisitedUrlSet(){
@@ -65,22 +69,52 @@ public class SpiderTools {
 	 * @return page content. type:String
 	 * @throws IOException
 	 */
-	public static String getContentFromUrl(String url) throws IOException {
+	public static String getContentFromUrl(String url) throws IOException,TooLargeException {
 		StringBuilder result = new StringBuilder();
 		BufferedReader in = null ;
+		
 		try {
-	    	URL realUrl = new URL(url);
+			
+			getSB(result, in, url, CHARSET);
+			String tarCharset = getCharsetPattern(result.toString());
+	        if(!tarCharset.equals(CHARSET) && !tarCharset.equals(MyEnum.DEFAULTCHARSET.toString())){
+	        	result.delete(0, result.length());
+	        	getSB(result, in, url, tarCharset);
+	        }
+	        /*String tarCharset = getCharsetPattern(result.toString());
+	        if(!tarCharset.equals(CHARSET) && !tarCharset.equals(MyEnum.DEFAULTCHARSET.toString())){
+	        	in = new BufferedReader(new InputStreamReader(connection.getInputStream(),tarCharset));
+	        	result.delete(0, result.length());
+	        	while ((line = in.readLine()) != null) {
+		        	result.append(line);
+		        }
+	        }*/
+	        /*URL realUrl = new URL(url);
 	    	URLConnection connection = realUrl.openConnection();
 	    	//将爬虫连接伪装成浏览器连接
 	        connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-	        connection.connect();
-	        InputStream urlStream = connection.getInputStream();  
-	        in = new BufferedReader(new InputStreamReader(urlStream,CHARSET));  
+	        try{
+	        	connection.connect();
+	        }catch(java.net.ConnectException ex){
+	        	System.out.println("time out url: " + url);
+	        	throw ex;
+	        }
+	        long cll = connection.getContentLengthLong();
+	        System.out.println("\n\nurl is: "+url);
+	        System.out.println("connection.getContentLengthLong(): "+cll);
+	        
+	        if(cll > noLargeThen){
+	        	System.out.println("file too large, not a html file");
+	        	throw new TooLargeException();
+	        }
+	        InputStream urlStream = connection.getInputStream();
+	        in = new BufferedReader(new InputStreamReader(urlStream,CHARSET));
 	        String line = "";  
 	        while ((line = in.readLine()) != null) {
 	        	result.append(line);
-	        }
-	 
+	        }*/
+	        
+	        
 	    } catch (MalformedURLException e) {
 	    	System.out.print("发送GET请求出现异常！" + e);
 	        e.printStackTrace();
@@ -92,10 +126,35 @@ public class SpiderTools {
 	            } catch (Exception e2) {
 	                e2.printStackTrace();
 	            }
-	        }	 
+	        }
 	    return result.toString();
     }
-	
+	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException{
+		URL realUrl = new URL(url);
+		URLConnection connection = realUrl.openConnection();
+    	//将爬虫连接伪装成浏览器连接
+        connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+        try{
+        	connection.connect();
+        }catch(java.net.ConnectException ex){
+        	System.out.println("time out url: " + url);
+        	throw ex;
+        }
+        long cll = connection.getContentLengthLong();
+        /*System.out.println("\n\nurl is: "+url);
+        System.out.println("connection.getContentLengthLong(): "+cll);*/
+        
+        if(cll > noLargeThen){
+        	System.out.println("file too large, not a html file");
+        	throw new TooLargeException();
+        }
+        InputStream urlStream = connection.getInputStream();
+        in = new BufferedReader(new InputStreamReader(urlStream,Charset));
+        String line = "";  
+        while ((line = in.readLine()) != null) {
+        	result.append(line);
+        }		
+	}
 	
 	/**
 	 * get completed img url list by html content.
@@ -160,9 +219,12 @@ public class SpiderTools {
 	 * @return page title
 	 */
 	public static String getTitle(String content){
+		if(content.equals(MyEnum.TOOLARGE.toString())){
+			return content;
+		}
 		int start = content.indexOf("<title");
 		if(start < 0){
-			return "notitle";
+			return MyEnum.NOTITLE.toString();
 		}
 		content = content.substring(start+3, content.length());
 		start = content.indexOf(">");
@@ -232,6 +294,15 @@ public class SpiderTools {
 		int end = contents.indexOf(">");
 		contents = contents.substring(0,end);
 		return contents;
+	}
+	public static String getCharsetPattern(String contents){
+		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*)>");
+		Matcher m=p.matcher(contents);
+		if(m.find()){			
+			return m.group(3).toUpperCase();
+		}else{
+			return MyEnum.DEFAULTCHARSET.toString();
+		}		
 	}
 	
 }

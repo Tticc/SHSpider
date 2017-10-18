@@ -1,5 +1,8 @@
 package wenc.shspider.test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.junit.*;
 
 import wenc.shspider.util.MyEnum;
@@ -22,6 +25,29 @@ public class CommonTest {
 		//连个参数的含义，（期望值，实际值）
 		
 	}
+	
+	@Test
+	public void testRegex(){
+		/*Pattern p=Pattern.compile("\\w+");
+		System.out.println(p.pattern());*/
+		/*Pattern p=Pattern.compile("4"); 
+		String[] str=p.split("我的QQ是:456456我的电话是:0532214我的邮箱是:aaa@aaa.com");
+		for(int i = 0; i < str.length; i++){
+			System.out.println(str[i]);
+		}*/
+		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*)>"); 
+		//Pattern p=Pattern.compile("charset=('|\")?(.*)('|\")?(.*)>"); 
+		Matcher m=p.matcher("<meta http-equiv=\"Content-Type\" content =\"text/html; charset = Shift_JIS\" />fdsjaifoijeojfioesa>"); 
+		System.out.println(m.find());//返回false,因为bb不能被\d+匹配,导致整个字符串匹配未成功. 
+		System.out.println(m.group());
+		System.out.println(m.groupCount());
+		System.out.println("target: "+m.group(3));
+		for(int i = 1; i <= m.groupCount(); i++){
+			System.out.println(m.group(i));
+		}
+		//System.out.println(m.matches());//返回true,因为\d+匹配到了整个字符串
+	}
+	
 	@Test
 	public void testSplit(){
 		String content = "adji<afjisdo>jidos<ajfdiso>fooee<apeioeo>ieej<ajeio";

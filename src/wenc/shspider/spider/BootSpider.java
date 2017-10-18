@@ -50,4 +50,10 @@ public class BootSpider {
 		}
 		System.out.println("be interrupted. size:" + ths.size());
 	}
+	public void checkThreadLive(){
+		for(int i = 0 ; i < ths.size() ; i++){
+			System.out.println(ths.get(i).getName() +" isInterrupted? "+ths.get(i).isInterrupted());
+			System.out.println(ths.get(i).getName() +" isAlive? "+ths.get(i).isAlive());
+		}
+	}
 }

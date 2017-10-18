@@ -1,22 +1,28 @@
 package wenc.shspider.spider;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
+
+import org.apache.log4j.Logger;
 
 import javassist.bytecode.Descriptor.Iterator;
 import wenc.shspider.entity.UrlSetEntity;
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.springcontext.SpringContext;
+import wenc.shspider.util.MyEnum;
+import wenc.shspider.util.TooLargeException;
 
 public class DataFecthThread extends Thread{
-
+	static Logger logger = Logger.getLogger(DataFecthThread.class);
 	private HashSet<String> newUrlSet = new HashSet<String>();
 
 	private ServiceIN serviceIN = (ServiceIN)SpringContext.myGetBean("serviceIN");
 	
 	@Override
 	public void run(){
-		while(!SpiderTools.isEmptyPersistentUrlSet()){
+		//while(!SpiderTools.isEmptyPersistentUrlSet()){
+		while(true){
 			try{
 				dataHanding(SpiderTools.getFromVisitedUrlSet());
 				
@@ -29,11 +35,20 @@ public class DataFecthThread extends Thread{
 	public void interrupt(){
 		
 	}*/
-	private void dataHanding(String url) throws IOException{
-		String contents = SpiderTools.getContentFromUrl(url);
+	private void dataHanding(String url) throws Exception{
+		String contents = null;
+		try{
+			contents = SpiderTools.getContentFromUrl(url);
+		}catch(TooLargeException tle){
+			tle.printStackTrace();
+			contents = MyEnum.TOOLARGE.toString();
+		}
 		dealWithPage(contents,url);
 	}
 	private void dealWithPage(String contents, String url){
+		if(contents == null){
+			return;
+		}
 		getAllLinks(contents, url);
 		updateTags(contents, url);
 	}
@@ -58,8 +73,10 @@ public class DataFecthThread extends Thread{
 	}
 	private void updateTags(String contents, String url){
 		UrlSetEntity persistentUrl = serviceIN.getUrlSetEntityByUrl(url);
+		persistentUrl.setModifyTime(new Date());
 		persistentUrl.setPageTitle(SpiderTools.getTitle(contents));
-		persistentUrl.setCharset(SpiderTools.getCharset(contents));
+		persistentUrl.setCharset(SpiderTools.getCharsetPattern(contents));		
 		serviceIN.updateUrlSet(persistentUrl);
+		logger.info("update urlset success.url: "+ url);
 	}
 }

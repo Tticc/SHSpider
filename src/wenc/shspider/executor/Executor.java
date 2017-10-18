@@ -40,7 +40,9 @@ public class Executor {
 		int hours = 0;
 		while(true){
 			Thread.sleep(1000*60*60);
+			//Thread.sleep(1000*12);
 			System.out.println("Spider has run " +(++hours)+ " hours!");
+			exe2.checkThreadLive();
 		}
 		/*while(true){
 			try{
@@ -90,6 +92,9 @@ public class Executor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private void checkThreadLive(){
+		bootSpider.checkThreadLive();
 	}
 	
 	//useless
