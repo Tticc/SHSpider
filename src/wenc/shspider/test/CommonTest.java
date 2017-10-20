@@ -35,7 +35,7 @@ public class CommonTest {
 		for(int i = 0; i < str.length; i++){
 			System.out.println(str[i]);
 		}*/
-		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*)>"); 
+		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*?)>"); 
 		//Pattern p=Pattern.compile("charset=('|\")?(.*)('|\")?(.*)>"); 
 		Matcher m=p.matcher("<meta http-equiv=\"Content-Type\" content =\"text/html; charset = Shift_JIS\" />fdsjaifoijeojfioesa>"); 
 		System.out.println(m.find());//返回false,因为bb不能被\d+匹配,导致整个字符串匹配未成功. 
@@ -46,6 +46,20 @@ public class CommonTest {
 			System.out.println(m.group(i));
 		}
 		//System.out.println(m.matches());//返回true,因为\d+匹配到了整个字符串
+	}
+	@Test
+	public void testRegex2(){
+		Pattern p=Pattern.compile("<a(.*?)(href *= *)('|\")(.*?)('|\")(.*?)>");
+		Matcher m=p.matcher("<a class=\"DevCenterFullNameNonMegaBlade\" href=\"https://msdn.microsoft.com/zh-cn\">Developer Network</a>"+
+                "<a class=\"DevCenterFullName\" href=\"https://msdn.microsoft.com/zh-cn\">Developer Network</a>"+
+                "<a class=\"DevCenterShortName\" href=\"https://msdn.microsoft.com/zh-cn\">Developer</a>");
+		System.out.println(m.groupCount());
+		while(m.find()){
+			System.out.println(m.group(4));
+			/*for(int i = 1; i <= m.groupCount(); i++){
+				System.out.println(m.group(i));
+			}*/
+		}
 	}
 	
 	@Test

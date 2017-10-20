@@ -129,7 +129,18 @@ public class SpiderTools {
 	        }
 	    return result.toString();
     }
+	/**
+	 * used by getContentFromUrl
+	 * @param result
+	 * @param in
+	 * @param url
+	 * @param Charset
+	 * @throws IOException
+	 * @throws TooLargeException
+	 * 
+	 */
 	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException{
+		//url = "http://www.bh5.com/man/qg/2017/0901/31071.shtml";
 		URL realUrl = new URL(url);
 		URLConnection connection = realUrl.openConnection();
     	//将爬虫连接伪装成浏览器连接
@@ -141,8 +152,8 @@ public class SpiderTools {
         	throw ex;
         }
         long cll = connection.getContentLengthLong();
-        /*System.out.println("\n\nurl is: "+url);
-        System.out.println("connection.getContentLengthLong(): "+cll);*/
+        System.out.println("\n\nurl is: "+url);
+        System.out.println("connection.getContentLengthLong(): "+cll);
         
         if(cll > noLargeThen){
         	System.out.println("file too large, not a html file");
@@ -150,10 +161,22 @@ public class SpiderTools {
         }
         InputStream urlStream = connection.getInputStream();
         in = new BufferedReader(new InputStreamReader(urlStream,Charset));
+        
+        
         String line = "";  
         while ((line = in.readLine()) != null) {
         	result.append(line);
-        }		
+        }
+        
+        /*int BUFFER_SIZE=1024;
+        char[] buffer = new char[BUFFER_SIZE]; // or some other size, 
+        int charsRead = 0;
+        while ( (charsRead  = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
+        	result.append(buffer, 0, charsRead);
+        }*/
+        
+        
+        System.out.println();
 	}
 	
 	/**
@@ -212,6 +235,17 @@ public class SpiderTools {
         	finalUrlList.add(finalUrl);
         }
         return finalUrlList;
+	}
+	public static LinkedList<String> getLinksFromContentPattern(String content,String oriUrl){
+		LinkedList<String> finalUrlList = new LinkedList<String>();
+		//String[] contentArr = content.split("<a");
+		
+		Pattern p=Pattern.compile("<a(.*?)(href *= *)('|\")(.*?)('|\")(.*?)>");
+		Matcher m=p.matcher(content);
+		while(m.find()){
+			finalUrlList.add(m.group(4));
+		}
+		return finalUrlList;
 	}
 	/**
 	 * get the title of the page according page content
@@ -296,7 +330,7 @@ public class SpiderTools {
 		return contents;
 	}
 	public static String getCharsetPattern(String contents){
-		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*)>");
+		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*?)>");
 		Matcher m=p.matcher(contents);
 		if(m.find()){			
 			return m.group(3).toUpperCase();

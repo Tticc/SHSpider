@@ -26,8 +26,12 @@ public class DataFecthThread extends Thread{
 			try{
 				dataHanding(SpiderTools.getFromVisitedUrlSet());
 				
+				
 			}catch(Exception ex){
         		ex.printStackTrace();
+        	}finally{
+        		System.out.println("done! Thread name: "+super.getName());
+        		System.out.println();
         	}
 		}
 	}
