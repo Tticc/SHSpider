@@ -21,7 +21,7 @@ import wenc.shspider.test.TestThread;
 public class Executor {
 	static Logger logger = Logger.getLogger(Executor.class);
 	//static ApplicationContext ctx;
-	static final int numofthread = 3;
+	static final int numofthread = 1;
 	@Autowired @Qualifier("customizatedLog4j")
 	private CustomizatedLog4j customizatedLog4j;
 	

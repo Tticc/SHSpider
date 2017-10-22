@@ -140,7 +140,8 @@ public class SpiderTools {
 	 * 
 	 */
 	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException{
-		//url = "http://www.bh5.com/man/qg/2017/0901/31071.shtml";
+		url = "http://home.fang.com/dianpu/bjjb/?priceids=0&yhfuwu=&banquanbao=0&sort=zhineng&iid=1&sid=5";
+		
 		URL realUrl = new URL(url);
 		URLConnection connection = realUrl.openConnection();
     	//将爬虫连接伪装成浏览器连接
@@ -152,7 +153,7 @@ public class SpiderTools {
         	throw ex;
         }
         long cll = connection.getContentLengthLong();
-        System.out.println("\n\nurl is: "+url);
+        System.out.println("\nurl is: "+url);
         System.out.println("connection.getContentLengthLong(): "+cll);
         
         if(cll > noLargeThen){
