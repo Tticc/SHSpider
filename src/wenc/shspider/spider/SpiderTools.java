@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.springcontext.SpringContext;
+import wenc.shspider.util.MessyCode;
 import wenc.shspider.util.MyEnum;
 import wenc.shspider.util.TooLargeException;
 
@@ -77,7 +78,8 @@ public class SpiderTools {
 			
 			getSB(result, in, url, CHARSET);
 			String tarCharset = getCharsetPattern(result.toString());
-	        if(!tarCharset.equals(CHARSET) && !tarCharset.equals(MyEnum.DEFAULTCHARSET.toString())){
+			
+	        if(!tarCharset.equals(CHARSET) && MessyCode.isMessyCode(getTitle(result.toString())) && !tarCharset.equals(MyEnum.DEFAULTCHARSET.toString())){
 	        	result.delete(0, result.length());
 	        	getSB(result, in, url, tarCharset);
 	        }
@@ -140,7 +142,7 @@ public class SpiderTools {
 	 * 
 	 */
 	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException{
-		url = "http://home.fang.com/dianpu/bjjb/?priceids=0&yhfuwu=&banquanbao=0&sort=zhineng&iid=1&sid=5";
+		//url = "http://home.fang.com/dianpu/bjjb/?priceids=0&yhfuwu=&banquanbao=0&sort=zhineng&iid=1&sid=5";
 		
 		URL realUrl = new URL(url);
 		URLConnection connection = realUrl.openConnection();
