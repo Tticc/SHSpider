@@ -142,7 +142,7 @@ public class SpiderTools {
 	 * 
 	 */
 	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException{
-		//url = "http://home.fang.com/dianpu/bjjb/?priceids=0&yhfuwu=&banquanbao=0&sort=zhineng&iid=1&sid=5";
+		//url = "http://home.fang.com/dianpu/50251/";
 		
 		URL realUrl = new URL(url);
 		URLConnection connection = realUrl.openConnection();

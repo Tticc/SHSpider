@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class BootSpider {
 
 	private static int urlNum = 1;
-	private static final int TIMEOFURLNUM = 3;
+	private static final int TIMEOFURLNUM = 1;
 	private static ArrayList<DataFecthThread> ths = new ArrayList<DataFecthThread>();
 	/*private static HashSet<String> visitedUrlSet = new HashSet<String>();
 	private static HashSet<String> newUrlSet = new HashSet<String>();
@@ -51,7 +51,11 @@ public class BootSpider {
 		System.out.println("be interrupted. size:" + ths.size());
 	}
 	public void checkThreadLive(){
-		for(int i = 0 ; i < ths.size() ; i++){
+		int size = ths.size();
+		if(size > 5){
+			size = 5;
+		}
+		for(int i = 0 ; i < size ; i++){
 			System.out.println(ths.get(i).getName() +" isInterrupted? "+ths.get(i).isInterrupted());
 			System.out.println(ths.get(i).getName() +" isAlive? "+ths.get(i).isAlive());
 		}

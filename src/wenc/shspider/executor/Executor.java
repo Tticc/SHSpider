@@ -1,27 +1,22 @@
 package wenc.shspider.executor;
 
-import java.util.List;
 
+import static wenc.shspider.springcontext.SpringContext.myGetBean;
+import java.util.List;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
-
 import wenc.shspider.component.*;
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.spider.BootSpider;
-import wenc.shspider.springcontext.SpringContext;
-import wenc.shspider.test.TestCus;
-import wenc.shspider.test.TestThread;
+
 
 @Component("executor")
 public class Executor {
 	static Logger logger = Logger.getLogger(Executor.class);
 	//static ApplicationContext ctx;
-	static final int numofthread = 5;
+	static final int numofthread = 20;
 	@Autowired @Qualifier("customizatedLog4j")
 	private CustomizatedLog4j customizatedLog4j;
 	
@@ -33,7 +28,7 @@ public class Executor {
 	
 	public static void main(String[] args) throws InterruptedException{
 		
-		Executor exe2 = (Executor)SpringContext.myGetBean("executor");
+		Executor exe2 = (Executor)myGetBean("executor");
 		//exe2.addUrl();
 		//boot spider with thread number
 		exe2.bootWithThreadNum(numofthread);

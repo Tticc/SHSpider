@@ -41,6 +41,8 @@ public class DataFecthThread extends Thread{
 	}*/
 	private void dataHanding(String url) throws Exception{
 		String contents = null;
+		//url = "http://www.64365.com/fagui/";//http://www.64365.com/ask/2657012.aspx
+		//
 		try{
 			contents = SpiderTools.getContentFromUrl(url);
 		}catch(TooLargeException tle){
