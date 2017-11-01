@@ -86,7 +86,7 @@ public class UrlSetDAO {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}finally{
-			url = null;
+			//url = null;
 		}
 	}
 	
