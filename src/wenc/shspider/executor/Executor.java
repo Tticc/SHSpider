@@ -32,12 +32,18 @@ public class Executor {
 		//exe2.addUrl();
 		//boot spider with thread number
 		exe2.bootWithThreadNum(numofthread);
+		
+		/*Thread.sleep(1000*20*1);
+		exe2.renewAllThread();
+		Thread.sleep(1000*20*1);
+		exe2.renewAllThread();*/
 		int hours = 0;
 		while(true){
 			Thread.sleep(1000*60*60);
 			//Thread.sleep(1000*12);
 			System.out.println("Spider has run " +(++hours)+ " hours!");
-			exe2.checkThreadLive();
+			exe2.renewAllThread();
+			
 		}
 		/*while(true){
 			try{
@@ -66,6 +72,9 @@ public class Executor {
 		Executor exe1 = new Executor();
 		exe1.addLog1();
 		*/
+	}
+	public void renewAllThread(){
+		bootSpider.renewAllThread();
 	}
 	//for test
 	private void fetchFromDB(){

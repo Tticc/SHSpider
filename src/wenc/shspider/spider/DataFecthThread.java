@@ -18,11 +18,11 @@ public class DataFecthThread extends Thread{
 	private HashSet<String> newUrlSet = new HashSet<String>();
 
 	private ServiceIN serviceIN = (ServiceIN)SpringContext.myGetBean("serviceIN");
-	
+	private volatile boolean interruptMySelf = false;
 	@Override
 	public void run(){
 		//while(!SpiderTools.isEmptyPersistentUrlSet()){
-		while(true){
+		while(!interruptMySelf){
 			try{
 				dataHanding(SpiderTools.getFromVisitedUrlSet());
 				
@@ -34,6 +34,9 @@ public class DataFecthThread extends Thread{
         		System.out.println();
         	}
 		}
+	}
+	public void interruptIt(){
+		this.interruptMySelf = true;
 	}
 	/*@Override
 	public void interrupt(){

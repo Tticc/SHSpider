@@ -16,8 +16,12 @@ public class SpringContext {
 		System.out.println("usr.dir: "+System.getProperty("user.dir"));
 		//String path = Thread.currentThread().getContextClassLoader();
 		//System.out.println("path is:"+path);
+		
+		//PropertyConfigurator.configure("config/log4j.properties");
+		//ctx = new FileSystemXmlApplicationContext("config/context.xml","config/spring-hibernate.xml");
 		PropertyConfigurator.configure("src/config/log4j.properties");
 		ctx = new FileSystemXmlApplicationContext("src/config/context.xml","src/config/spring-hibernate.xml");
+		
 		System.out.println("initialize success");
 		System.out.println((System.currentTimeMillis()-startTimeStamp)+"ms");
 	}

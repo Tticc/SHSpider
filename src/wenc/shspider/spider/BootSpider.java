@@ -18,7 +18,6 @@ public class BootSpider {
 	private static HashSet<String> persistentUrlSet = new HashSet<String>();*/
 	
 	public void bootWithThreadNum(int threadNum) throws InterruptedException {
-		terminateThread();
 		urlNum = threadNum * TIMEOFURLNUM;
 		int count = threadNum;
 		for (int i = 0; i < threadNum; i++) {
@@ -37,16 +36,27 @@ public class BootSpider {
 	public static int getUrlNum(){
 		return urlNum;
 	}
-	private void terminateThread(){
-		for(int i = 0 ; i < ths.size() ; i++){
-			ths.get(i).interrupt();
-			
-			/*try{
-				ths.get(i).interrupt();
+	public void renewAllThread(){
+		int count = ths.size();
+		for(int i = 0; i < count; i++){
+			try{
+				//terminate one
+				terminateThread(1);
+				//add new one and start it
+				ths.add(new DataFecthThread());				
+				ths.get(ths.size() - 1).start();
+				Thread.sleep(4000);
 			}catch(InterruptedException ex){
 				ex.printStackTrace();
-				break;
-			}*/
+			}
+		}
+	}
+	private void terminateThread(int num) throws InterruptedException{
+		for(int i = 0 ; i < num ; i++){
+			DataFecthThread dft = ths.get(0);
+			dft.interruptIt();			
+			dft.join();
+			ths.remove(0);
 		}
 		System.out.println("be interrupted. size:" + ths.size());
 	}
