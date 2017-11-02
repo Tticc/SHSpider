@@ -47,8 +47,10 @@ public class DataFecthThread extends Thread{
 		//url = "http://www.64365.com/fagui/";//http://www.64365.com/ask/2657012.aspx
 		//why notitle:
 			//http://db.auto.sohu.com//db.auto.sohu.com/jinkoubmw/1700/131983/price.html
-			//http://db.auto.sohu.com/yiqivw/1005
+			//why it know i'm a spider?
+				//url = "http://db.auto.sohu.com/dongfengnissan/1073";
 		//make it as a root url:http://db.auto.sohu.com/home/
+		
 		try{
 			contents = SpiderTools.getContentFromUrl(url);
 		}catch(TooLargeException tle){

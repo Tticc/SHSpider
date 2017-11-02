@@ -27,7 +27,7 @@ public class Executor {
 	private BootSpider bootSpider;
 	
 	public static void main(String[] args) throws InterruptedException{
-		
+		//start time:11-2 12:50
 		Executor exe2 = (Executor)myGetBean("executor");
 		//exe2.addUrl();
 		//boot spider with thread number

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -77,46 +78,11 @@ public class SpiderTools {
 		try {
 			
 			getSB(result, in, url, CHARSET);
-			String tarCharset = getCharsetPattern(result.toString());
-			
+			String tarCharset = getCharsetPattern(result.toString());			
 	        if(!tarCharset.equals(CHARSET) && MessyCode.isMessyCode(getTitle(result.toString())) && !tarCharset.equals(MyEnum.DEFAULTCHARSET.toString())){
 	        	result.delete(0, result.length());
 	        	getSB(result, in, url, tarCharset);
-	        }
-	        /*String tarCharset = getCharsetPattern(result.toString());
-	        if(!tarCharset.equals(CHARSET) && !tarCharset.equals(MyEnum.DEFAULTCHARSET.toString())){
-	        	in = new BufferedReader(new InputStreamReader(connection.getInputStream(),tarCharset));
-	        	result.delete(0, result.length());
-	        	while ((line = in.readLine()) != null) {
-		        	result.append(line);
-		        }
-	        }*/
-	        /*URL realUrl = new URL(url);
-	    	URLConnection connection = realUrl.openConnection();
-	    	//将爬虫连接伪装成浏览器连接
-	        connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-	        try{
-	        	connection.connect();
-	        }catch(java.net.ConnectException ex){
-	        	System.out.println("time out url: " + url);
-	        	throw ex;
-	        }
-	        long cll = connection.getContentLengthLong();
-	        System.out.println("\n\nurl is: "+url);
-	        System.out.println("connection.getContentLengthLong(): "+cll);
-	        
-	        if(cll > noLargeThen){
-	        	System.out.println("file too large, not a html file");
-	        	throw new TooLargeException();
-	        }
-	        InputStream urlStream = connection.getInputStream();
-	        in = new BufferedReader(new InputStreamReader(urlStream,CHARSET));
-	        String line = "";  
-	        while ((line = in.readLine()) != null) {
-	        	result.append(line);
-	        }*/
-	        
-	        
+	        }	        
 	    } catch (MalformedURLException e) {
 	    	System.out.print("发送GET请求出现异常！" + e);
 	        e.printStackTrace();
@@ -146,20 +112,32 @@ public class SpiderTools {
 		
 		URL realUrl = new URL(url);
 		URLConnection connection = realUrl.openConnection();
+		//HttpURLConnection cc;
     	//将爬虫连接伪装成浏览器连接
-        connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-        try{
+		connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+		connection.setConnectTimeout(30*1000);
+		connection.setReadTimeout(30*1000);
+		//getResultByURLConnection(result, in, connection, url, Charset);
+		getResultByHttpURLConnection(result, in, connection, url, Charset);
+		
+        //System.out.println(result.toString());
+        System.out.println();
+	}
+	public static void getResultByURLConnection(StringBuilder result, BufferedReader in,URLConnection connection,String url, String Charset) throws IOException, TooLargeException{
+		
+		try{
         	connection.connect();
         }catch(java.net.ConnectException ex){
         	System.out.println("time out url: " + url);
         	throw ex;
         }
+		//int responseCode = connection.getResponseCode();
         long cll = connection.getContentLengthLong();
         System.out.println("\nurl is: "+url);
         System.out.println("connection.getContentLengthLong(): "+cll);
         
         if(cll > noLargeThen){
-        	System.out.println("file too large, not a html file");
+        	System.out.println("file too large, may not a html file");
         	throw new TooLargeException();
         }
         InputStream urlStream = connection.getInputStream();
@@ -177,9 +155,47 @@ public class SpiderTools {
         while ( (charsRead  = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
         	result.append(buffer, 0, charsRead);
         }*/
-        
-        
-        System.out.println();
+	}
+
+	public static void getResultByHttpURLConnection(StringBuilder result, BufferedReader in,URLConnection connection,String url, String Charset) throws IOException, TooLargeException{
+		HttpURLConnection HttpConnection = (HttpURLConnection) connection;
+		/*HttpConnection.setConnectTimeout(30*1000);
+		HttpConnection.setReadTimeout(30*1000);*/
+		try{
+			HttpConnection.connect();
+        }catch(java.net.ConnectException ex){
+        	System.out.println("time out url: " + url);
+        	throw ex;
+        }
+        System.out.println("\nurl is:"+url);
+		int responseCode = HttpConnection.getResponseCode();
+		if(responseCode == 200){
+			long len = HttpConnection.getContentLengthLong();
+	        System.out.println("connection.getContentLengthLong(): "+len);
+
+	        if(len > noLargeThen){
+	        	System.out.println("file too large, may not a html file");
+	        	throw new TooLargeException();
+	        }
+	        InputStream urlStream = HttpConnection.getInputStream();
+	        in = new BufferedReader(new InputStreamReader(urlStream,Charset));
+	        
+	        /*
+	        String line = "";  
+	        while ((line = in.readLine()) != null) {
+	        	result.append(line);
+	        }*/
+	        
+	        int BUFFER_SIZE=1024;
+	        char[] buffer = new char[BUFFER_SIZE]; // or some other size, 
+	        int charsRead = 0;
+	        while ( (charsRead  = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
+	        	result.append(buffer, 0, charsRead);
+	        }
+		}else{
+			result.append("<title>Error Code:"+responseCode+"</title>");
+		}
+
 	}
 	
 	/**
