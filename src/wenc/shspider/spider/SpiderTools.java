@@ -355,7 +355,7 @@ public class SpiderTools {
 		String tempUrl = "";
 		for(String item : finalUrl){
 			tempUrl = item+"/";
-			Pattern p = Pattern.compile("(https://.*?|http://.*?)/.*");
+			Pattern p = Pattern.compile("(https://.*?|http://.*?)(/.*|\\?.*)");
 			Matcher m = p.matcher(tempUrl);
 			if(m.find()){
 				ll.add(m.group(1));

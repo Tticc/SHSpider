@@ -11,5 +11,6 @@
         <!-- <mapping class="wenc.shspider.entity.UserEntity" /> -->
         <mapping class="wenc.shspider.entity.UrlSetEntity" />
         <mapping class="wenc.shspider.entity.TagEntity" />
+        <mapping class="wenc.shspider.entity.RootUrlEntity" />
     </session-factory>
 </hibernate-configuration>

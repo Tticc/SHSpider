@@ -14,17 +14,17 @@ public class TestSpider {
 
 	private static HashSet<String> visitedUrlQueue = new HashSet<String>();
 	public static void main(String[] args){
-		//getRootUrl();
+		getRootUrl();
 		
 		/*LinkedList<String> finalUrl = new LinkedList<String>();
 		finalUrl.add("http://im.clo.com1/file");
 		finalUrl.add("https://im.clo.com2");
 		finalUrl.add("https://im.clo.com3/");
-		finalUrl.add("http://im.clo.com4/file/jfo.html");
+		finalUrl.add("http://im.clo.com4?file/jfo.html");
 		finalUrl.add("http://im.clo.com1/file");
 		testAddAll(finalUrl);*/
 		
-		testForeach();
+		//testForeach();
 	}
 	
 	@Test
@@ -79,14 +79,14 @@ public class TestSpider {
 		finalUrl.add("http://im.clo.com1/file");
 		finalUrl.add("https://im.clo.com2");
 		finalUrl.add("https://im.clo.com3/");
-		finalUrl.add("http://im.clo.com4/file/jfo.html");
+		finalUrl.add("http://im.clo.com4?file/jfo.html");
 		finalUrl.add("http://im.clo.com5/files");
 		
 		LinkedList<String> ll = new LinkedList<String>();
 		String tempUrl = "";
 		for(String item : finalUrl){
 			tempUrl = item+"/";
-			Pattern p = Pattern.compile("(https://.*?|http://.*?)/.*");
+			Pattern p = Pattern.compile("(https://.*?|http://.*?)(/.*|\\?.*)");
 			Matcher m = p.matcher(tempUrl);
 			if(m.find()){
 				ll.add(m.group(1));
