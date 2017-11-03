@@ -18,7 +18,7 @@ public class UrlSetDAO {
 	static Logger logger = Logger.getLogger(UrlSetDAO.class);
 	
 	@Autowired
-	private SessionFactory sessionFactory;	
+	private SessionFactory sessionFactory;
 
 	
 	//@Transactional
@@ -63,16 +63,16 @@ public class UrlSetDAO {
 	public void addUrl(UrlSetEntity url){
 		try{
 			sessionFactory.getCurrentSession().save(url);
-		}catch(org.hibernate.exception.ConstraintViolationException ex){
+		}catch(org.hibernate.exception.ConstraintViolationException cvex){
 			sessionFactory.getCurrentSession().clear();
 			logger.info("Duplicate entry at wenc.shspider.dao.UrlSetDAO.addUrl()");
 			//sessionFactory.getCurrentSession().flush();
-		}catch(org.hibernate.exception.DataException ex2){
+		}catch(org.hibernate.exception.DataException dex){
 			sessionFactory.getCurrentSession().clear();
 			System.out.println("Data truncation: Data too long for column 'url' at row 1");
 			logger.info("Data truncation: Data too long for column 'url' at row 1");
-		}catch(Exception exx){
-			exx.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
 			sessionFactory.getCurrentSession().clear();
 			System.out.println("something wrong finally!!!!!!!!!!!!!!!");
 		}finally{

@@ -130,10 +130,10 @@ public class CommonTest {
 		
 	}
 	@Test
-	public void testGetTitle(){
+/*	public void testGetTitle(){
 		String html = "fjis<masteji charset=\"utf-8\">oejit<title>i am the title</title>fhsuaiofji";
 		System.out.println(getCharset(html));
-	}
+	}*/
 	public static String getTitle(String content){
 		int start = content.indexOf("<title");
 		if(start < 0){
@@ -148,7 +148,7 @@ public class CommonTest {
 		return content;
 	}
 
-	public static String getCharset(String contents){
+/*	public static String getCharset(String contents){
 		int start = contents.indexOf("charset");
 		if(start == -1){
 			return MyEnum.DEFAULTCHARSET.toString();
@@ -159,7 +159,7 @@ public class CommonTest {
 		int end = contents.indexOf(">");
 		contents = contents.substring(0,end);
 		return contents;
-	}
+	}*/
 }
 
 

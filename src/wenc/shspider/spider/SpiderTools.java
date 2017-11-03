@@ -276,7 +276,7 @@ public class SpiderTools {
 		Pattern p=Pattern.compile("<a(.*?)(href *= *)('|\")(.*?)('|\")(.*?)>");
 		Matcher m=p.matcher(content);
 		while(m.find()){
-			finalUrlList.add(m.group(4));
+			finalUrlList.add(getFinalURL(m.group(4),oriUrl));
 		}
 		return finalUrlList;
 	}
@@ -350,7 +350,20 @@ public class SpiderTools {
         }
         return finalUrl;
     }
-	public static String getCharset(String contents){
+	public static LinkedList<String> getRootUrl(HashSet<String> finalUrl){
+		LinkedList<String> ll = new LinkedList<String>();
+		String tempUrl = "";
+		for(String item : finalUrl){
+			tempUrl = item+"/";
+			Pattern p = Pattern.compile("(https://.*?|http://.*?)/.*");
+			Matcher m = p.matcher(tempUrl);
+			if(m.find()){
+				ll.add(m.group(1));
+			}
+		}
+		return ll;
+	}
+	/*public static String getCharset(String contents){
 		int start = contents.indexOf("charset");
 		if(start == -1){
 			return MyEnum.DEFAULTCHARSET.toString();
@@ -361,7 +374,7 @@ public class SpiderTools {
 		int end = contents.indexOf(">");
 		contents = contents.substring(0,end);
 		return contents;
-	}
+	}*/
 	public static String getCharsetPattern(String contents){
 		Pattern p=Pattern.compile("(charset *= *)('|\")?([\\d\\w-]*)('|\")?(.*?)>");
 		Matcher m=p.matcher(contents);

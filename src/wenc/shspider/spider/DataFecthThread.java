@@ -7,6 +7,7 @@ import java.util.HashSet;
 import org.apache.log4j.Logger;
 
 import javassist.bytecode.Descriptor.Iterator;
+import wenc.shspider.entity.RootUrlEntity;
 import wenc.shspider.entity.UrlSetEntity;
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.springcontext.SpringContext;
@@ -17,6 +18,7 @@ import wenc.shspider.util.TooLargeException;
 public class DataFecthThread extends Thread{
 	static Logger logger = Logger.getLogger(DataFecthThread.class);
 	private HashSet<String> newUrlSet = new HashSet<String>();
+	private HashSet<String> rootUrlSet = new HashSet<String>();
 
 	private ServiceIN serviceIN = (ServiceIN)SpringContext.myGetBean("serviceIN");
 	private volatile boolean interruptMySelf = false;
@@ -75,19 +77,32 @@ public class DataFecthThread extends Thread{
 	}
 	private void getAllLinks(String contents, String url){
 		newUrlSet.addAll(SpiderTools.getLinksFromContent(contents,url));
+		rootUrlSet.addAll(SpiderTools.getRootUrl(newUrlSet));
 		
 		persistNewUrl();
 	}
 	private void persistNewUrl(){
 		for(java.util.Iterator<String> it = newUrlSet.iterator();it.hasNext();){
 			String url = it.next();
-			manipulateDB(url);
+			addUrl(url);
 			//newUrlSet.re
 		}
+		for(String item : rootUrlSet){
+			addRootUrl(item);
+		}
+		rootUrlSet.removeAll(rootUrlSet);
 		newUrlSet.removeAll(newUrlSet);
-		newUrlSet = new HashSet<String>();
+		//newUrlSet = new HashSet<String>();
 	}
-	private void manipulateDB(String url){
+	
+	
+	//manipulate Database below
+	private void addRootUrl(String url){
+		RootUrlEntity ruEntity = new RootUrlEntity();
+		ruEntity.setUrl(url);
+		serviceIN.addRootUrl(ruEntity);
+	}
+	private void addUrl(String url){
 		UrlSetEntity urlEntity = new UrlSetEntity();
 		urlEntity.setUrl(url);
 		serviceIN.addUrlSet(urlEntity);

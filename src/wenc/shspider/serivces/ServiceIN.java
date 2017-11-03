@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import wenc.shspider.entity.RootUrlEntity;
 import wenc.shspider.entity.UrlSetEntity;
 
 
@@ -16,6 +17,9 @@ public class ServiceIN {
 
 	@Autowired
 	private TagService tagService;
+	
+	@Autowired
+	private RootUrlService rootUrlService;
 	
 	/*public void addTag(){
 		System.out.println("start to add record");
@@ -54,6 +58,14 @@ public class ServiceIN {
 	}
 	public List<String> fetchPersistedUrl(int number) {		
 		return urlService.fetchPersistedUrl(number);
+	}
+	
+	//rooturl
+	public void addRootUrl(RootUrlEntity ruEntity){
+		rootUrlService.addRootUrl(ruEntity);
+	}
+	public List<String> fetchPersistedRootUrl(int number){
+		return rootUrlService.fetchPersistedUrl(number);
 	}
 	
 }
