@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.springcontext.SpringContext;
+import wenc.shspider.util.ErrorResponseException;
 import wenc.shspider.util.MessyCode;
 import wenc.shspider.util.MyEnum;
 import wenc.shspider.util.TooLargeException;
@@ -70,8 +71,9 @@ public class SpiderTools {
 	 * @param url
 	 * @return page content. type:String
 	 * @throws IOException
+	 * @throws ErrorResponseException 
 	 */
-	public static String getContentFromUrl(String url) throws IOException,TooLargeException {
+	public static String getContentFromUrl(String url) throws IOException,TooLargeException, ErrorResponseException {
 		StringBuilder result = new StringBuilder();
 		BufferedReader in = null ;
 		
@@ -105,9 +107,10 @@ public class SpiderTools {
 	 * @param Charset
 	 * @throws IOException
 	 * @throws TooLargeException
+	 * @throws ErrorResponseException 
 	 * 
 	 */
-	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException{
+	public static void getSB(StringBuilder result, BufferedReader in,String url, String Charset) throws IOException, TooLargeException, ErrorResponseException{
 		//url = "http://home.fang.com/dianpu/50251/";
 		
 		URL realUrl = new URL(url);
@@ -116,13 +119,65 @@ public class SpiderTools {
     	//将爬虫连接伪装成浏览器连接
 		connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
 		connection.setConnectTimeout(30*1000);
-		connection.setReadTimeout(30*1000);
+		connection.setReadTimeout(60*1000);
 		//getResultByURLConnection(result, in, connection, url, Charset);
 		getResultByHttpURLConnection(result, in, connection, url, Charset);
 		
         //System.out.println(result.toString());
         System.out.println();
 	}
+	/**
+	 * Http connect.
+	 * @param result
+	 * @param in
+	 * @param connection
+	 * @param url
+	 * @param Charset
+	 * @throws IOException
+	 * @throws TooLargeException
+	 * @throws ErrorResponseException
+	 */
+	public static void getResultByHttpURLConnection(StringBuilder result, BufferedReader in,URLConnection connection,String url, String Charset) throws IOException, TooLargeException, ErrorResponseException{
+		HttpURLConnection HttpConnection = (HttpURLConnection) connection;
+		/*HttpConnection.setConnectTimeout(30*1000);
+		HttpConnection.setReadTimeout(30*1000);*/
+		try{
+			HttpConnection.connect();
+        }catch(java.net.ConnectException ex){
+        	System.out.println("time out url: " + url);
+        	throw ex;
+        }
+		int responseCode = HttpConnection.getResponseCode();
+		if(responseCode == 200){
+			long len = HttpConnection.getContentLengthLong();
+	        System.out.println("\nurl is:"+url);
+	        System.out.println("connection.getContentLengthLong(): "+len);
+
+	        if(len > noLargeThen){
+	        	System.out.println("file too large, may not a html file");
+	        	throw new TooLargeException();
+	        }
+	        InputStream urlStream = HttpConnection.getInputStream();
+	        in = new BufferedReader(new InputStreamReader(urlStream,Charset));
+	        
+	        /*
+	        String line = "";  
+	        while ((line = in.readLine()) != null) {
+	        	result.append(line);
+	        }*/
+	        
+	        int BUFFER_SIZE=1024;
+	        char[] buffer = new char[BUFFER_SIZE]; // or some other size, 
+	        int charsRead = 0;
+	        while ( (charsRead  = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
+	        	result.append(buffer, 0, charsRead);
+	        }
+		}else{
+			throw new ErrorResponseException(responseCode);
+		}
+
+	}
+	//useless now
 	public static void getResultByURLConnection(StringBuilder result, BufferedReader in,URLConnection connection,String url, String Charset) throws IOException, TooLargeException{
 		
 		try{
@@ -155,47 +210,6 @@ public class SpiderTools {
         while ( (charsRead  = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
         	result.append(buffer, 0, charsRead);
         }*/
-	}
-
-	public static void getResultByHttpURLConnection(StringBuilder result, BufferedReader in,URLConnection connection,String url, String Charset) throws IOException, TooLargeException{
-		HttpURLConnection HttpConnection = (HttpURLConnection) connection;
-		/*HttpConnection.setConnectTimeout(30*1000);
-		HttpConnection.setReadTimeout(30*1000);*/
-		try{
-			HttpConnection.connect();
-        }catch(java.net.ConnectException ex){
-        	System.out.println("time out url: " + url);
-        	throw ex;
-        }
-        System.out.println("\nurl is:"+url);
-		int responseCode = HttpConnection.getResponseCode();
-		if(responseCode == 200){
-			long len = HttpConnection.getContentLengthLong();
-	        System.out.println("connection.getContentLengthLong(): "+len);
-
-	        if(len > noLargeThen){
-	        	System.out.println("file too large, may not a html file");
-	        	throw new TooLargeException();
-	        }
-	        InputStream urlStream = HttpConnection.getInputStream();
-	        in = new BufferedReader(new InputStreamReader(urlStream,Charset));
-	        
-	        /*
-	        String line = "";  
-	        while ((line = in.readLine()) != null) {
-	        	result.append(line);
-	        }*/
-	        
-	        int BUFFER_SIZE=1024;
-	        char[] buffer = new char[BUFFER_SIZE]; // or some other size, 
-	        int charsRead = 0;
-	        while ( (charsRead  = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
-	        	result.append(buffer, 0, charsRead);
-	        }
-		}else{
-			result.append("<title>Error Code:"+responseCode+"</title>");
-		}
-
 	}
 	
 	/**

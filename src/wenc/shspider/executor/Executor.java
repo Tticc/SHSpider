@@ -27,7 +27,7 @@ public class Executor {
 	private BootSpider bootSpider;
 	
 	public static void main(String[] args) throws InterruptedException{
-		//start time:11-2 12:50
+		//start time:11-2 16:13
 		Executor exe2 = (Executor)myGetBean("executor");
 		//exe2.addUrl();
 		//boot spider with thread number
@@ -42,7 +42,7 @@ public class Executor {
 			Thread.sleep(1000*60*60);
 			//Thread.sleep(1000*12);
 			System.out.println("Spider has run " +(++hours)+ " hours!");
-			exe2.renewAllThread();
+			//exe2.renewAllThread();
 			
 		}
 		/*while(true){

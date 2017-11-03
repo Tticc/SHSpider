@@ -10,6 +10,7 @@ import javassist.bytecode.Descriptor.Iterator;
 import wenc.shspider.entity.UrlSetEntity;
 import wenc.shspider.serivces.ServiceIN;
 import wenc.shspider.springcontext.SpringContext;
+import wenc.shspider.util.ErrorResponseException;
 import wenc.shspider.util.MyEnum;
 import wenc.shspider.util.TooLargeException;
 
@@ -56,6 +57,12 @@ public class DataFecthThread extends Thread{
 		}catch(TooLargeException tle){
 			tle.printStackTrace();
 			contents = MyEnum.TOOLARGE.toString();
+		}catch(java.net.SocketTimeoutException stex){
+			stex.printStackTrace();
+			contents = "<title>Error:SocketTimeoutException</title>";
+		}catch(ErrorResponseException erex){
+			erex.printStackTrace();
+			contents = "<title>Error Code:"+erex.getResponseCode()+"</title>";
 		}
 		dealWithPage(contents,url);
 	}

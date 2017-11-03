@@ -18,7 +18,7 @@ public class TooLargeException extends Exception{
 	}
 	@Override
 	public void printStackTrace(){
-		System.out.println("Error: file too large, not a html file");
+		System.out.println("Error: file too large, may not a html file");
 		super.printStackTrace();
 	}
 }
