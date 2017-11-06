@@ -341,7 +341,7 @@ public class SpiderTools {
             }else{
 				int splittoken = tempURL.lastIndexOf("/");
 				if(splittoken<0){
-					domain = requestUrl;
+					domain = requestUrl+"/";
 				}else{
 					domain = requestUrl.substring(0, splittoken + 1 + protocolLength);
 				}
