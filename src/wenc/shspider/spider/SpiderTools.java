@@ -26,7 +26,7 @@ public class SpiderTools {
 
 	private static HashSet<String> persistentUrlSet = new HashSet<String>();
 	public static final String CHARSET = "UTF-8";
-	public static final long noLargeThen = 1024*1024*5;
+	public static final long noLargeThen = 1024*1024*5;//5M
 	//public static final String GET_CHAR = "charset";
 
 	public synchronized static String getFromVisitedUrlSet(){
@@ -338,7 +338,18 @@ public class SpiderTools {
 					domain = requestUrl.substring(0, splittoken + protocolLength);
 				}
 				finalUrl = domain + href;
-            }else{
+            }else if(href.startsWith("./")){
+            	href = href.replace("./", "");
+				int splittoken = tempURL.lastIndexOf("/");
+				if(splittoken<0){
+					domain = requestUrl+"/";
+				}else{
+					domain = requestUrl.substring(0, splittoken + 1 + protocolLength);
+				}
+				finalUrl = domain + href;  
+            	
+            }//else if(href.startsWith("../))
+            else{
 				int splittoken = tempURL.lastIndexOf("/");
 				if(splittoken<0){
 					domain = requestUrl+"/";
