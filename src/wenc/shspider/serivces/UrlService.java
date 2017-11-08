@@ -15,10 +15,11 @@ public class UrlService {
 	@Autowired
 	private UrlSetDAO urlSetDAO;
 	
-	public void addUrl(UrlSetEntity url){
-		
-			urlSetDAO.addUrl(url);
-		
+	public void addUrl(UrlSetEntity url){		
+			urlSetDAO.addUrl(url);		
+	}
+	public void addUrlChecked(UrlSetEntity url){
+		urlSetDAO.addUrlChecked(url);
 	}
 
 	public List<String> fetchPersistedUrl(int number) {

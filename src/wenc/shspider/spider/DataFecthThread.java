@@ -67,6 +67,9 @@ public class DataFecthThread extends Thread{
 		}catch(ErrorResponseException erex){
 			erex.printStackTrace();
 			contents = "<title>Error Code:"+erex.getResponseCode()+"</title>";
+		}catch(Exception ex){
+			ex.printStackTrace();
+			contents = "<title>Unknow Error:"+ex.toString()+"</title>";
 		}
 		dealWithPage(contents,url);
 	}
@@ -107,7 +110,8 @@ public class DataFecthThread extends Thread{
 	private void addUrl(String url){
 		UrlSetEntity urlEntity = new UrlSetEntity();
 		urlEntity.setUrl(url);
-		serviceIN.addUrlSet(urlEntity);
+		//serviceIN.addUrlSet(urlEntity);
+		serviceIN.addUrlSetChecked(urlEntity);
 	}
 	private void updateTags(String contents, String url){
 		UrlSetEntity persistentUrl = serviceIN.getUrlSetEntityByUrl(url);

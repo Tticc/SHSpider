@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-//@Table(name = "urlset")
-@Table(name = "urlset",
-indexes = {@Index(name = "urlIndex",  columnList="url", unique = true)})
+@Table(name = "urlset_main")
+/*@Table(name = "urlset",
+indexes = {@Index(name = "urlIndex",  columnList="url", unique = true)})*/
 public class UrlSetEntity {
 	@Id
 	@GeneratedValue

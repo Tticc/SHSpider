@@ -63,6 +63,7 @@ public class UrlSetDAO {
 	public void addUrl(UrlSetEntity url){
 		try{
 			sessionFactory.getCurrentSession().save(url);
+			//System.out.println("save new url:"+url.getUrl());
 		}catch(org.hibernate.exception.ConstraintViolationException cvex){
 			sessionFactory.getCurrentSession().clear();
 			logger.info("Duplicate entry at wenc.shspider.dao.UrlSetDAO.addUrl()");
@@ -78,6 +79,12 @@ public class UrlSetDAO {
 		}finally{
 			url = null;
 		}
+	}
+	public void addUrlChecked(UrlSetEntity url){
+		if(getUrlSetEntityByUrl(url.getUrl()) == null){
+			addUrl(url);
+		}
+		url = null;
 	}
 	
 	public void updateUrl(UrlSetEntity url){

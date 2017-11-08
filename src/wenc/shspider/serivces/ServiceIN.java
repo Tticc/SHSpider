@@ -50,6 +50,9 @@ public class ServiceIN {
 	public void addUrlSet(UrlSetEntity url){
 		urlService.addUrl(url);
 	}
+	public void addUrlSetChecked(UrlSetEntity url){
+		urlService.addUrlChecked(url);
+	}
 	public UrlSetEntity getUrlSetEntityByUrl(String url){
 		return urlService.getUrlSetEntityByUrl(url);
 	}
