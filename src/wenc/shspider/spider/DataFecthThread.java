@@ -3,6 +3,8 @@ package wenc.shspider.spider;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 import org.apache.log4j.Logger;
 
@@ -18,33 +20,50 @@ import wenc.shspider.util.TooLargeException;
 public class DataFecthThread extends Thread{
 	static Logger logger = Logger.getLogger(DataFecthThread.class);
 	private HashSet<String> newUrlSet = new HashSet<String>();
-	private HashSet<String> rootUrlSet = new HashSet<String>();
-
-	private ServiceIN serviceIN = (ServiceIN)SpringContext.myGetBean("serviceIN");
+	private HashSet<String> rootUrlSet = new HashSet<String>();	
+	private ServiceIN serviceIN = (ServiceIN)SpringContext.myGetBean("serviceIN");	
 	private volatile boolean interruptMySelf = false;
+	
+	private Lock lock;
+	private Condition cond;
+	public DataFecthThread(Lock l,Condition c){
+		this.lock = l;
+		this.cond = c;
+	}
 	@Override
 	public void run(){
 		//while(!SpiderTools.isEmptyPersistentUrlSet()){
-		while(!interruptMySelf){
+		while(true){
 			try{
-				dataHanding(SpiderTools.getFromVisitedUrlSet());
-				
+				if(interruptMySelf){
+					if(lock.tryLock()){
+						try{
+							cond.await();
+						}catch(InterruptedException ex){
+							ex.printStackTrace();
+						}finally{
+							lock.unlock();
+						}
+					}
+					sleep(500);
+				}else{
+					dataHanding(SpiderTools.getFromVisitedUrlSet());
+				}
 				
 			}catch(Exception ex){
         		ex.printStackTrace();
         	}finally{
-        		System.out.println("done! Thread name: "+super.getName());
+        		System.out.println("done! Thread name:"+super.getName());
         		System.out.println();
         	}
 		}
 	}
-	public void interruptIt(){
+	public void interruptMe(){
 		this.interruptMySelf = true;
 	}
-	/*@Override
-	public void interrupt(){
-		
-	}*/
+	public void runMe(){
+		this.interruptMySelf = false;
+	}
 	private void dataHanding(String url) throws Exception{
 		String contents = null;
 		//url = "http://www.64365.com/fagui/";//http://www.64365.com/ask/2657012.aspx
@@ -119,6 +138,6 @@ public class DataFecthThread extends Thread{
 		persistentUrl.setPageTitle(SpiderTools.getTitle(contents));
 		persistentUrl.setCharset(SpiderTools.getCharsetPattern(contents));		
 		serviceIN.updateUrlSet(persistentUrl);
-		logger.info("update urlset success.url: "+ url);
+		logger.info("update urlset success.url:"+ url);
 	}
 }

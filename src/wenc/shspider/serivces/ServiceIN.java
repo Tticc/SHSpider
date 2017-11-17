@@ -21,6 +21,9 @@ public class ServiceIN {
 	@Autowired
 	private RootUrlService rootUrlService;
 	
+	@Autowired
+	private SqlService sqlService;
+	
 	/*public void addTag(){
 		System.out.println("start to add record");
 		TagEntity te = new TagEntity();
@@ -38,6 +41,8 @@ public class ServiceIN {
 		te.setTag("update");
 		tagDAO.updateTag(te);
 	}*/
+	
+	//urlset
 	public void addUrlSet(){
 		UrlSetEntity url = new UrlSetEntity();
 		url.setUrl("https://www.hao123.com/");
@@ -63,12 +68,30 @@ public class ServiceIN {
 		return urlService.fetchPersistedUrl(number);
 	}
 	
+	
 	//rooturl
 	public void addRootUrl(RootUrlEntity ruEntity){
 		rootUrlService.addRootUrl(ruEntity);
 	}
 	public List<String> fetchPersistedRootUrl(int number){
 		return rootUrlService.fetchPersistedUrl(number);
+	}
+	
+	//sqlDAO
+	public int countLastTable(){
+		return sqlService.countLastTable();
+	}
+	public int createSubTable(){
+		return sqlService.createSubTable();
+	}
+	public void migrateAndDeleteRecord(int index){
+		sqlService.migrateAndDeleteRecord(index);
+	}
+	public boolean haveTable(String tableName){
+		return sqlService.haveTable(tableName);
+	}
+	public void renewMainTable(){
+		sqlService.renewMainTable();
 	}
 	
 }

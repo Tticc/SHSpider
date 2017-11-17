@@ -7,5 +7,8 @@ public enum MyEnum {
 	DEFAULTCHARSET,
 	NOTITLE,
 	TOOLARGE,
+	urlset_,
+	urlset_last,
+	urlset_main,
 	
 }

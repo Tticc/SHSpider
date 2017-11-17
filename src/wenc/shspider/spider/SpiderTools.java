@@ -144,14 +144,14 @@ public class SpiderTools {
 		try{
 			HttpConnection.connect();
         }catch(java.net.ConnectException ex){
-        	System.out.println("time out url: " + url);
+        	System.out.println("time out url:" + url);
         	throw ex;
         }
 		int responseCode = HttpConnection.getResponseCode();
 		if(responseCode == 200){
 			long len = HttpConnection.getContentLengthLong();
 	        System.out.println("\nurl is:"+url);
-	        System.out.println("connection.getContentLengthLong(): "+len);
+	        System.out.println("connection.getContentLengthLong():"+len);
 
 	        if(len > noLargeThen){
 	        	System.out.println("file too large, may not a html file");
@@ -183,13 +183,13 @@ public class SpiderTools {
 		try{
         	connection.connect();
         }catch(java.net.ConnectException ex){
-        	System.out.println("time out url: " + url);
+        	System.out.println("time out url:" + url);
         	throw ex;
         }
 		//int responseCode = connection.getResponseCode();
         long cll = connection.getContentLengthLong();
-        System.out.println("\nurl is: "+url);
-        System.out.println("connection.getContentLengthLong(): "+cll);
+        System.out.println("\nurl is:"+url);
+        System.out.println("connection.getContentLengthLong():"+cll);
         
         if(cll > noLargeThen){
         	System.out.println("file too large, may not a html file");
