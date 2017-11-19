@@ -38,9 +38,11 @@ public class Executor {
 		//start time:11-3 20:15
 		Executor exe2 = (Executor)myGetBean("executor");
 		//exe2.addUrl();
+		
 		//boot spider with thread number
 		exe2.bootWithThreadNum(numofthread,lock,cond);
 		
+		//exe2.renewMainTable();
 				
 		int days = 0;
 		while(true){
