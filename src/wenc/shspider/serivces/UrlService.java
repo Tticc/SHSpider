@@ -21,7 +21,9 @@ public class UrlService {
 	public void addUrlChecked(UrlSetEntity url){
 		urlSetDAO.addUrlChecked(url);
 	}
-
+	public int getFirstUnprocessTable(){
+		return urlSetDAO.getFirstUnprocessTable();
+	}
 	public List<String> fetchPersistedUrl(int number) {
 		List<UrlSetEntity> listEntity = urlSetDAO.fetchPersistedUrl(number);
 		List<String> urlList = new ArrayList<String>();

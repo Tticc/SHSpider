@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class BootSpider {
 
 	private static int urlNum = 1;
-	private static final int TIMEOFURLNUM = 10;
+	private static final int TIMEOFURLNUM = 20;
 	private static ArrayList<DataFecthThread> ths = new ArrayList<DataFecthThread>();
 	//private
 	/*private static HashSet<String> visitedUrlSet = new HashSet<String>();

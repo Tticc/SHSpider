@@ -67,6 +67,9 @@ public class ServiceIN {
 	public List<String> fetchPersistedUrl(int number) {		
 		return urlService.fetchPersistedUrl(number);
 	}
+	public int getFirstUnprocessTable(){
+		return urlService.getFirstUnprocessTable();
+	}
 	
 	
 	//rooturl
@@ -92,6 +95,12 @@ public class ServiceIN {
 	}
 	public void renewMainTable(){
 		sqlService.renewMainTable();
+	}
+	public void renewMainTableManually(int start, int end){
+		sqlService.renewMainTableManually(start, end);
+	}
+	public void droptable(){
+		sqlService.droptable();
 	}
 	
 }

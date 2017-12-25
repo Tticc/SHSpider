@@ -30,6 +30,20 @@ public class SqlService {
 		unionString.append("`").append(MyEnum.urlset_last.toString()).append("`");
 		sqlDAO.recreateMainTable(MyEnum.urlset_main.toString(),unionString.toString());
 	}
+	public void renewMainTableManually(int start, int end){
+		sqlDAO.dropTable(MyEnum.urlset_main.toString());
+		StringBuilder unionString = new StringBuilder();//"`urlset_0`,`urlset_1`,`urlset_2`,
+		if(start > 31){
+			unionString.append("`").append(MyEnum.urlset_last.toString()).append("`");
+			sqlDAO.recreateMainTable(MyEnum.urlset_main.toString(),unionString.toString());
+			return;
+		}
+		for(int i = start; i <= end; i++){
+			unionString.append("`").append(MyEnum.urlset_.toString()+i).append("`,");
+		}
+		unionString.append("`").append(MyEnum.urlset_last.toString()).append("`");
+		sqlDAO.recreateMainTable(MyEnum.urlset_main.toString(),unionString.toString());
+	}
 	
 	/**
 	 * return index of subtable
@@ -54,5 +68,11 @@ public class SqlService {
 	
 	public boolean haveTable(String tableName){
 		return sqlDAO.haveTable(tableName);
+	}
+	
+	public void droptable(){
+		for(int i = 19; i<=174; i++){
+			sqlDAO.dropTable("urlset_"+i);
+		}
 	}
 }

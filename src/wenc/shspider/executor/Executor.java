@@ -37,23 +37,46 @@ public class Executor {
 	public static void main(String[] args) throws InterruptedException{
 		//start time:11-3 20:15
 		Executor exe2 = (Executor)myGetBean("executor");
-		//exe2.addUrl();
+
+		//renewMainTableManually - start - will be useless
+		//exe2.renewMainTableManually(1,4);
+		//Thread.sleep(1000*60*60*24*2);
+		//renewMainTableManually - end
 		
 		//boot spider with thread number
 		exe2.bootWithThreadNum(numofthread,lock,cond);
 		
 		//exe2.renewMainTable();
+		//exe2.droptable();
 				
 		int days = 0;
+		int currentFirstTable = 0;
 		while(true){
 			Thread.sleep(1000*60*60*24*2);
 			
 			System.out.println("Spider has run " +(++days)*2+ " days!");
-			int count = exe2.count()-1/numOfSubTable;
+			
+			//get processed table out of the urlset_main for better performance
+			int fut = exe2.getFirstUnprocessTable();
+			if(fut > currentFirstTable){
+				exe2.awaitAll();//wait all the threads.
+				currentFirstTable = fut;
+				Thread.sleep(1000*60*3);//3 minutes left to wait the threads
+				if(currentFirstTable+3 >= 31){
+					exe2.renewMainTableManually(currentFirstTable, 31);
+				}else{
+					exe2.renewMainTableManually(currentFirstTable, currentFirstTable+3);
+				}
+				
+				exe2.runAll();//run all the threads
+			}
+			
+			//
+			int count = (exe2.count()-1)/numOfSubTable;
 			if(count > 5){
 				exe2.awaitAll();//wait all the threads.
 				while(count > 0){
-					Thread.sleep(1000*60*3);//10 minutes left to wait the threads
+					Thread.sleep(1000*60*3);//3 minutes left to wait the threads
 					System.out.println("i think all threads are awaited");
 					//split table
 
@@ -103,6 +126,9 @@ public class Executor {
 		exe1.addLog1();
 		*/
 	}
+	public void droptable(){
+		serviceIN.droptable();
+	}
 	private int count(){
 		int total = serviceIN.countLastTable();
 		System.out.println("total records of last:"+total);
@@ -116,6 +142,12 @@ public class Executor {
 	}
 	public void renewMainTable(){
 		serviceIN.renewMainTable();
+	}
+	private void renewMainTableManually(int start, int end){
+		serviceIN.renewMainTableManually(start, end);
+	}
+	private int getFirstUnprocessTable(){
+		return serviceIN.getFirstUnprocessTable();
 	}
 	
 	private void awaitAll(){

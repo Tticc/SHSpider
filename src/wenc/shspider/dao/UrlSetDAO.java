@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import wenc.shspider.entity.UrlSetEntity;
+import wenc.shspider.executor.Executor;
 
 @Transactional
 //need @Repository to generate the bean
@@ -41,6 +42,17 @@ public class UrlSetDAO {
 			return ur.get(0);
 		}
 		return null;
+	}
+	public int getFirstUnprocessTable(){
+		String queryStr = "from UrlSetEntity where isprocess = 0";
+		Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+		query.setFirstResult(0);
+		query.setMaxResults(1);
+		List<UrlSetEntity> ur = query.list();
+		if(ur != null && ur.size() > 0){
+			return (int) Math.floor((ur.get(0).getId()-1)/Executor.numOfSubTable);
+		}
+		return 0;
 	}
 	//use SQL
 	/*public List<String> fetchPersistedUrl(int number) {

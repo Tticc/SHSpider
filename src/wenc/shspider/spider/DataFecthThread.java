@@ -96,7 +96,9 @@ public class DataFecthThread extends Thread{
 		if(contents == null){
 			return;
 		}
-		getAllLinks(contents, url);
+		//there are no space to save any data, yield
+		//getAllLinks(contents, url);
+		
 		updateTags(contents, url);
 	}
 	private void getAllLinks(String contents, String url){
